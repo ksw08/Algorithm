@@ -1,0 +1,41 @@
+<DFS>
+깊이우선 탐색 >> 각 노드별로 막힐 때 까지 쭉 탐색을 진행하고 다음 노드로 이동하는 구조다.
+
+BFS와의 차이점 >> 오직 코드를 구현하는 과정에서 코드는 전부 같다. 다만, 코드를 짜는 과정에서 bfs에서 queue를 사용했던 것을 stack으로 바꾸면 자연스럽게 자신이 방문한 노드의 깊이를 우선으로 탐색하게 된다.
+
+가장 큰 차이점!!! 이라고 한다면 BFS의 경우 다음 노드를 방문할 때 숫자를 1씩 증가시키면 초기 지점에서 특정 지점까지의 거리를 나타낼 수 있었지만 DFS의 경우 '시작할 시 방문해야 하는 노드가 한개 이상이면' 시작 지점에서 특정 지점까지의 거리를 나타낼 수 없다.
+
+즉, 2차원 배열에서의 floodfill을 구현하는것에서는 BFS, DFS 모두 구현이 가능하지만, 거리 구현에 있어서 BFS만 가능하므로 왠만하면 BFS만 사용한다. DFS의 경우 트리, 그래프에서 다룬다고함,,, ㅎㅎ,,
+
+[DFS 기본구조]
+#include <bits/stdc++.h>
+using namespace std;
+#define X first
+#define Y second
+int board[502][502] = {};
+bool vis[502][502];
+int n = 7, m = 10;
+int dx[4] = { -1,0,1,0 }; // 탐색순서: 상,우,하,좌
+int dy[4] = { 0,1,0,-1 };
+
+int main() {
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	stack<pair<int, int>> S; //stack 생성, pair를 이용해서 정수쌍으로 좌표값을 저장함
+	vis[0][0] = 1; // 시작 좌표의 visit값 = 1
+	S.push({ 0,0 }); // 좌표값 in
+	// DFS 시 무조건 탐색 후 범위 내부 확인 후 visit값=1 후 값 push
+
+	while (!Q.empty()) {
+		pair<int, int> cur = S.top(); // 탐색할 좌표 cur에 할당
+		S.pop(); // 그 좌표는 버리고
+		for (int i = 0; i < 3;i++) {
+			int nx = cur.X + dx[i];
+			int ny = cur.Y + dy[i];
+			if (nx < 0 || nx>=7 || ny < 0 || ny>=10) continue; // 범위 7.10 벗어나면 skip
+			if (vis[nx][ny] || board[nx][ny] != 1) continue; // 방문 O or board 값이 1이면 skip
+			vis[nx][ny] = 1;
+			S.push({ nx,ny });
+		}
+	}
+}

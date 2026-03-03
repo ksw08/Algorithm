@@ -1,0 +1,45 @@
+<덱>
+덱은 큐의 양방향 버전. 앞쪽 뒤쪽으로 삽입과 삭제가 자유로운 자료구조이다. 그렇기에 스택과 큐가 덱의 서브라고 생각해도 된다.
+
+[덱의 성질]
+덱은 일반적으로 큐와 성질이 동일하다. 왜냐하면? 큐의 양방향 형태이기 때문!
+- 원소의 추가: O(1)
+- 원소의 제거: O(1)
+- 제일 앞/뒤의 원소 확인: O(1)
+- 제일 앞/뒤가 아닌 나머지 원소들의 확인/변경이 원칙적으로 불가능
+!!!근데 deque의 특이한 점은 STL 사용하여 덱의 인덱스에 직접 접근이 가능하여 각 원소들을 확인하는데 O(1)의 시간이 소요 된다는 점이다.
+
+**배열로 덱 구현 시**
+const int MX = 1000005;
+int dat[2 * MX + 1];
+int head = MX, tail = MX;
+이렇게 초기 설정을 해놓는다.
+>> 덱의 입력 횟수를 MX로 두고 덱은 입력을 앞과 뒤에서 할 수 있기 때문에 2*MX+1로 크기를 잡아놓고 head와 tail을 MX에 위치시켜 놓는다.
+++ head 부분에 push할 경우 이미 head는 원소가 있는 곳을 가리키고 있기에 --head 이후 원소를 삽입해야 한다.
+
+[deque STL]
+deque<int> DQ;
+DQ.push_front(10); // 10
+DQ.push_back(50); // 10 50
+DQ.push_front(24); // 24 10 50
+for(auto x: DQ) cout << x; // 24 10 50
+cout << DQ.size() << '\n'; // 3
+if(DQ.empty()) cout << "DQ is empty\n";
+else cout << "DQ is not empty\n";
+DQ.pop_front(); // 10 50
+DQ.pop_back(); // 10
+cout << DQ.back() << '\n'; // 10
+DQ.push_back(72); // 10 72
+cout << DQ.front() << '\n'; // 10
+DQ.push_back(12); // 10 72 12
+DQ[2] = 17; // 10 72 17
+DQ.insert(DQ.begin()+1, 33); // 10 33 72 17
+DQ.insert(DQ.begin()+4, 60); // 10 33 72 17 60
+for(auto x: DQ) cout << x << ' '; // 10 33 72 17 60 
+cout << '\n';
+DQ.erase(DQ.begin()+3); // 10 33 72 60
+cout << DQ[3] << '\n'; // 60
+DQ.clear(); // DQ 모든 원소 제거
+
+**deque는 자료구조상 앞쪽과 뒷쪽에서 원소를 빼고 넣는 구조로 이루어져 있다. 근데 STL 상에서는 vector와 사용 방식이 같다. 기본적으로 앞뒤에서 빼고 넣는게 가능해야 하기에 push_front, push_back, pop_front, pop_back이 있어야 하지만 추가적으로 insert(인덱스, 원소), erase(인덱스);, size(), front(), back(), clear() 가 있다. 인덱스와 같은 경우 vector와는 다르게 deque는 메모리 상 혼재되어 있기에 단순히 정수를 적어서 표현할 수 없고 begin이나 end를 사용해서 앞 또는 뒤의 주소에 가감산을 하는 형태로 메모리에 접근해야 한다. 
+문제 풀이의 경우 앞 뒤의 원소를 필요로 하여 빼고 넣는 구조라면 deque를 사용하고 이것이 아니라면 vector혹은 배열을 사용하는 것이 좋다. 하지만 크기가 자유자재로 변화하는 자료구조가 필요하다면 vector의 경우 재할당을 해주지 않으면 runtime error가 발생하기에 이런 경우에는 deque을 사용하는 것이 유용하다. 하지만 deque는 메모리가 혼재되어 있기에 연산 시간이 많이 소요된다는 단점이 있다.
